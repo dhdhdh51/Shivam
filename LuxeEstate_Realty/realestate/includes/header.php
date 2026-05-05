@@ -28,6 +28,7 @@ $currentPage  = $currentPage ?? '';
 <meta name="theme-color" content="#800000">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= SITE_URL ?>/assets/css/style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <?php if ($ga = getSetting('google_analytics')): ?><script async src="https://www.googletagmanager.com/gtag/js?id=<?= $ga ?>"></script><?php endif; ?>

@@ -17,9 +17,10 @@ $stats = [
     ['value' => getSetting('stat_years',      '10+'),   'label' => 'Years Experience','icon' => 'fa-award'],
 ];
 
-$siteName  = getSetting('site_name', 'LuxeEstate Realty');
-$pageTitle = "About Us | $siteName";
-$metaDesc  = "Learn about $siteName — our story, our team, and our mission to help you find your perfect home.";
+$currentPage   = 'about';
+$siteName      = getSetting('site_name', 'LuxeEstate Realty');
+$pageMetaTitle = "About Us | $siteName";
+$pageMetaDesc  = "Learn about $siteName — our story, our team, and our mission to help you find your perfect home.";
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -174,8 +175,8 @@ include __DIR__ . '/includes/header.php';
                 <div class="team-info">
                     <h3><?= htmlspecialchars($member['name']) ?></h3>
                     <span class="team-role"><?= htmlspecialchars($member['role']) ?></span>
-                    <?php if ($member['experience']): ?>
-                    <span class="team-exp"><?= htmlspecialchars($member['experience']) ?> yrs experience</span>
+                    <?php if (!empty($member['experience_years'])): ?>
+                    <span class="team-exp"><?= htmlspecialchars($member['experience_years']) ?> yrs experience</span>
                     <?php endif; ?>
                     <div class="team-social">
                         <?php if ($member['linkedin']): ?>

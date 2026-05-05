@@ -48,11 +48,12 @@ $blogs = $stmt->fetchAll();
 $cats = $db->query("SELECT DISTINCT category FROM blogs WHERE status='published' AND category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
 
 // Featured blogs (for sidebar)
-$featured = $db->query("SELECT id, title, slug, image, created_at FROM blogs WHERE status='published' AND featured=1 ORDER BY created_at DESC LIMIT 4")->fetchAll();
+$featured = $db->query("SELECT id, title, slug, featured_image AS image, created_at FROM blogs WHERE status='published' AND featured=1 ORDER BY created_at DESC LIMIT 4")->fetchAll();
 
-$siteName  = getSetting('site_name', 'LuxeEstate Realty');
-$pageTitle = "Real Estate Blog | $siteName";
-$metaDesc  = "Expert insights, market trends, and buying guides from $siteName. Your trusted real estate resource.";
+$currentPage   = 'blog';
+$siteName      = getSetting('site_name', 'LuxeEstate Realty');
+$pageMetaTitle = "Real Estate Blog | $siteName";
+$pageMetaDesc  = "Expert insights, market trends, and buying guides from $siteName. Your trusted real estate resource.";
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -125,8 +126,8 @@ include __DIR__ . '/includes/header.php';
                     <?php foreach ($blogs as $i => $blog): ?>
                     <article class="blog-card <?= $i === 0 && $page === 1 && !$search && !$category ? 'blog-card-featured' : '' ?> fade-up">
                         <a href="<?= SITE_URL ?>/blog/<?= htmlspecialchars($blog['slug']) ?>" class="blog-card-img-wrap">
-                            <?php if ($blog['image']): ?>
-                            <img src="<?= UPLOAD_URL . htmlspecialchars($blog['image']) ?>"
+                            <?php if (!empty($blog['featured_image'])): ?>
+                            <img src="<?= UPLOAD_URL . htmlspecialchars($blog['featured_image']) ?>"
                                  alt="<?= htmlspecialchars($blog['title']) ?>" loading="lazy" class="blog-card-img">
                             <?php else: ?>
                             <div class="blog-card-img blog-no-img">

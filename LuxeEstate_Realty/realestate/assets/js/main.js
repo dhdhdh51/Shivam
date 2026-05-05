@@ -81,7 +81,7 @@
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-  document.querySelectorAll('.animate-fade-up, .stat-number').forEach(el => observer.observe(el));
+  document.querySelectorAll('.animate-fade-up, .fade-up, .fade-left, .fade-right, .stat-number').forEach(el => observer.observe(el));
 
   // ===================== POPUP =====================
   const popup = document.getElementById('lead-popup');

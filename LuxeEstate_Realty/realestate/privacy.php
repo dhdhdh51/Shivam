@@ -2,9 +2,10 @@
 require_once 'config/config.php';
 require_once 'config/database.php';
 require_once 'functions/functions.php';
-$settings = getAllSettings();
-$page_title = 'Privacy Policy';
-$meta_desc  = 'Privacy Policy for ' . ($settings['site_name'] ?? SITE_NAME);
+$settings      = getAllSettings();
+$currentPage   = '';
+$pageMetaTitle = 'Privacy Policy | ' . ($settings['site_name'] ?? 'LuxeEstate Realty');
+$pageMetaDesc  = 'Privacy Policy for ' . ($settings['site_name'] ?? 'LuxeEstate Realty');
 require_once 'includes/header.php';
 ?>
 

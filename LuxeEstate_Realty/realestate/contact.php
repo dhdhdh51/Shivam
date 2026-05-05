@@ -7,10 +7,11 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/functions/functions.php';
 
-$csrf = generateCSRF();
-$siteName  = getSetting('site_name', 'LuxeEstate Realty');
-$pageTitle = "Contact Us | $siteName";
-$metaDesc  = "Get in touch with $siteName. We're here to help you find your perfect property.";
+$csrf          = generateCSRF();
+$currentPage   = 'contact';
+$siteName      = getSetting('site_name', 'LuxeEstate Realty');
+$pageMetaTitle = "Contact Us | $siteName";
+$pageMetaDesc  = "Get in touch with $siteName. We're here to help you find your perfect property.";
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -46,15 +47,15 @@ include __DIR__ . '/includes/header.php';
                         <div class="contact-detail-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="contact-detail-body">
                             <strong>Office Address</strong>
-                            <span><?= nl2br(htmlspecialchars(getSetting('address', '123 Real Estate Tower, MG Road, Bangalore - 560001'))) ?></span>
+                            <span><?= nl2br(htmlspecialchars(getSetting('contact_address', '123 Real Estate Tower, MG Road, Bangalore - 560001'))) ?></span>
                         </div>
                     </div>
                     <div class="contact-detail-item">
                         <div class="contact-detail-icon"><i class="fas fa-phone-alt"></i></div>
                         <div class="contact-detail-body">
                             <strong>Phone</strong>
-                            <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('phone')) ?>">
-                                <?= htmlspecialchars(getSetting('phone', '+91 98765 43210')) ?>
+                            <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('contact_phone', '+91 98765 43210')) ?>">
+                                <?= htmlspecialchars(getSetting('contact_phone', '+91 98765 43210')) ?>
                             </a>
                         </div>
                     </div>
@@ -62,8 +63,8 @@ include __DIR__ . '/includes/header.php';
                         <div class="contact-detail-icon"><i class="fas fa-envelope"></i></div>
                         <div class="contact-detail-body">
                             <strong>Email</strong>
-                            <a href="mailto:<?= htmlspecialchars(getSetting('email')) ?>">
-                                <?= htmlspecialchars(getSetting('email', 'info@luxestate.com')) ?>
+                            <a href="mailto:<?= htmlspecialchars(getSetting('contact_email', 'info@luxestate.com')) ?>">
+                                <?= htmlspecialchars(getSetting('contact_email', 'info@luxestate.com')) ?>
                             </a>
                         </div>
                     </div>
@@ -78,7 +79,7 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Social Links -->
                 <div class="contact-social">
-                    <?php $fb = getSetting('facebook'); $ig = getSetting('instagram'); $li = getSetting('linkedin'); $yt = getSetting('youtube'); ?>
+                    <?php $fb = getSetting('facebook_url'); $ig = getSetting('instagram_url'); $li = getSetting('linkedin_url'); $yt = getSetting('youtube_url'); ?>
                     <?php if ($fb): ?><a href="<?= htmlspecialchars($fb) ?>" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a><?php endif; ?>
                     <?php if ($ig): ?><a href="<?= htmlspecialchars($ig) ?>" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a><?php endif; ?>
                     <?php if ($li): ?><a href="<?= htmlspecialchars($li) ?>" target="_blank" class="social-link"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
@@ -162,7 +163,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="cta-strip-actions">
             <a href="<?= SITE_URL ?>/properties.php" class="btn-gold">Browse Properties</a>
-            <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('phone')) ?>" class="btn-white-outline">
+            <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('contact_phone')) ?>" class="btn-white-outline">
                 <i class="fas fa-phone"></i> Call Now
             </a>
         </div>

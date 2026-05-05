@@ -36,7 +36,7 @@ if (!$blog) {
 $db->prepare("UPDATE blogs SET views = views + 1 WHERE id = ?")->execute([$blog['id']]);
 
 // Related posts
-$related = $db->prepare("SELECT id, title, slug, image, created_at, category
+$related = $db->prepare("SELECT id, title, slug, featured_image AS image, created_at, category
     FROM blogs WHERE status='published' AND id != ? AND category = ? ORDER BY created_at DESC LIMIT 3");
 $related->execute([$blog['id'], $blog['category'] ?: '']);
 $relatedPosts = $related->fetchAll();
@@ -46,7 +46,7 @@ if (count($relatedPosts) < 3) {
     $ids   = array_column($relatedPosts, 'id');
     $ids[] = $blog['id'];
     $notIn = implode(',', array_map('intval', $ids));
-    $more  = $db->query("SELECT id, title, slug, image, created_at, category
+    $more  = $db->query("SELECT id, title, slug, featured_image AS image, created_at, category
         FROM blogs WHERE status='published' AND id NOT IN ($notIn) ORDER BY created_at DESC LIMIT " . (3 - count($relatedPosts)))->fetchAll();
     $relatedPosts = array_merge($relatedPosts, $more);
 }
@@ -58,9 +58,10 @@ $prev->execute([$blog['created_at']]); $prev = $prev->fetch();
 $next = $db->prepare("SELECT title, slug FROM blogs WHERE status='published' AND created_at > ? ORDER BY created_at ASC LIMIT 1");
 $next->execute([$blog['created_at']]); $next = $next->fetch();
 
-$siteName  = getSetting('site_name', 'LuxeEstate Realty');
-$pageTitle = ($blog['meta_title'] ?: $blog['title']) . " | $siteName";
-$metaDesc  = $blog['meta_desc'] ?: mb_substr(strip_tags($blog['content']), 0, 160);
+$currentPage   = 'blog';
+$siteName      = getSetting('site_name', 'LuxeEstate Realty');
+$pageMetaTitle = ($blog['meta_title'] ?: $blog['title']) . " | $siteName";
+$pageMetaDesc  = $blog['meta_description'] ?: mb_substr(strip_tags($blog['content']), 0, 160);
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -74,9 +75,9 @@ include __DIR__ . '/includes/header.php';
             <article class="blog-article">
 
                 <!-- Hero Image -->
-                <?php if ($blog['image']): ?>
+                <?php if (!empty($blog['featured_image'])): ?>
                 <div class="blog-hero-img">
-                    <img src="<?= UPLOAD_URL . htmlspecialchars($blog['image']) ?>"
+                    <img src="<?= UPLOAD_URL . htmlspecialchars($blog['featured_image']) ?>"
                          alt="<?= htmlspecialchars($blog['title']) ?>">
                     <?php if ($blog['category']): ?>
                     <span class="blog-cat-badge"><?= htmlspecialchars($blog['category']) ?></span>

@@ -45,8 +45,9 @@ $csrf = generateCSRF();
 $whatsappMsg = urlencode("Hi, I'm interested in {$property['title']} priced at " . formatPrice($property['price']) . ". Please share more details.");
 $whatsappPhone = preg_replace('/[^0-9]/', '', getSetting('whatsapp_number', '919876543210'));
 
-$metaTitle = $property['meta_title'] ?: "{$property['title']} | " . getSetting('site_name');
-$metaDesc  = $property['meta_desc']  ?: substr(strip_tags($property['description']), 0, 160);
+$currentPage   = 'properties';
+$pageMetaTitle = $property['meta_title'] ?: "{$property['title']} | " . getSetting('site_name');
+$pageMetaDesc  = $property['meta_description'] ?: substr(strip_tags($property['description']), 0, 160);
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -133,26 +134,26 @@ include __DIR__ . '/includes/header.php';
                             <span><?= htmlspecialchars($property['bhk']) ?> BHK</span>
                         </div>
                         <?php endif; ?>
-                        <?php if ($property['area']): ?>
+                        <?php if (!empty($property['area_sqft'])): ?>
                         <div class="spec-item">
                             <i class="fas fa-vector-square"></i>
-                            <span><?= number_format($property['area']) ?> sq.ft</span>
+                            <span><?= number_format($property['area_sqft']) ?> sq.ft</span>
                         </div>
                         <?php endif; ?>
                         <div class="spec-item">
                             <i class="fas fa-building"></i>
-                            <span><?= htmlspecialchars($property['type']) ?></span>
+                            <span><?= ucfirst(htmlspecialchars($property['type'])) ?></span>
                         </div>
-                        <?php if ($property['possession']): ?>
+                        <?php if (!empty($property['possession'])): ?>
                         <div class="spec-item">
                             <i class="fas fa-calendar-check"></i>
-                            <span><?= htmlspecialchars($property['possession']) ?></span>
+                            <span><?= ucfirst(htmlspecialchars($property['possession'])) ?></span>
                         </div>
                         <?php endif; ?>
-                        <?php if ($property['rera_id']): ?>
+                        <?php if (!empty($property['rera_number'])): ?>
                         <div class="spec-item">
                             <i class="fas fa-certificate"></i>
-                            <span>RERA: <?= htmlspecialchars($property['rera_id']) ?></span>
+                            <span>RERA: <?= htmlspecialchars($property['rera_number']) ?></span>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -160,7 +161,7 @@ include __DIR__ . '/includes/header.php';
 
                 <!-- Quick Actions -->
                 <div class="property-quick-actions">
-                    <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('phone')) ?>"
+                    <a href="tel:<?= preg_replace('/[^0-9+]/', '', getSetting('contact_phone')) ?>"
                        class="btn-maroon btn-action"><i class="fas fa-phone"></i> Call Now</a>
                     <a href="https://wa.me/<?= $whatsappPhone ?>?text=<?= $whatsappMsg ?>"
                        target="_blank" class="btn-whatsapp btn-action"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -264,8 +265,8 @@ include __DIR__ . '/includes/header.php';
                 <!-- Agent Card -->
                 <?php
                 $agentName  = getSetting('agent_name',  'Rahul Sharma');
-                $agentPhone = getSetting('phone', '+91 98765 43210');
-                $agentEmail = getSetting('email', 'info@luxestate.com');
+                $agentPhone = getSetting('contact_phone', '+91 98765 43210');
+                $agentEmail = getSetting('contact_email', 'info@luxestate.com');
                 ?>
                 <div class="agent-card">
                     <div class="agent-avatar">
