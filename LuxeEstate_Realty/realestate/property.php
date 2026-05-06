@@ -26,9 +26,9 @@ if (!$property) {
     exit;
 }
 
-// Parse JSON fields
-$amenities   = json_decode($property['amenities'] ?? '[]', true) ?: [];
-$nearby      = json_decode($property['nearby'] ?? '[]', true) ?: [];
+// getPropertyBySlug() already decodes amenities/nearby to arrays
+$amenities   = is_array($property['amenities']) ? $property['amenities'] : (json_decode($property['amenities'] ?? '[]', true) ?: []);
+$nearby      = is_array($property['nearby'])    ? $property['nearby']    : (json_decode($property['nearby']    ?? '[]', true) ?: []);
 $images      = $property['images'] ?? [];
 $primaryImage = '';
 foreach ($images as $img) {
