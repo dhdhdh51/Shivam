@@ -14,11 +14,10 @@ if (isAdminLoggedIn()) {
 }
 
 $error = '';
-$csrf  = generateCSRF();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRF($_POST['csrf_token'] ?? '')) {
-        $error = 'Security token expired. Please try again.';
+        $error = 'Security token expired. Please refresh and try again.';
     } else {
         $email    = sanitize($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
@@ -35,8 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    $csrf = generateCSRF(); // Regenerate after POST
 }
+
+// Generate token AFTER any POST handling so it's never overwritten before validation
+$csrf = generateCSRF();
 
 $siteName = getSetting('site_name', 'LuxeEstate Realty');
 $logoUrl  = getSetting('logo') ? UPLOAD_URL . getSetting('logo') : '';
