@@ -12,7 +12,7 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf = $_POST['csrf_token'] ?? '';
-    if (!verifyCsrfToken($csrf)) {
+    if (!validateCSRF($csrf)) {
         $errors[] = 'Invalid security token.';
     } else {
         $action   = $_POST['form_action'] ?? '';
@@ -89,7 +89,7 @@ if (isset($_GET['edit'])) {
     $edit_t = $es->fetch();
 }
 
-$csrf_token = generateCsrfToken();
+$csrf_token = generateCSRF();
 $page_title = 'Testimonials';
 require_once 'layout-header.php';
 ?>
@@ -319,7 +319,7 @@ function toggleStatus(id, type, btn) {
     fd.append('action', 'toggle_status');
     fd.append('id', id);
     fd.append('type', type);
-    fd.append('csrf_token', '<?= generateCsrfToken() ?>');
+    fd.append('csrf_token', '<?= generateCSRF() ?>');
     fetch('ajax.php', {method:'POST', body:fd})
         .then(r=>r.json()).then(d => { if(d.success) location.reload(); else alert(d.message); });
 }

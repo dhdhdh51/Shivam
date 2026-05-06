@@ -13,7 +13,7 @@ $success = '';
 // ── Handle form submission ──
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf = $_POST['csrf_token'] ?? '';
-    if (!verifyCsrfToken($csrf)) {
+    if (!validateCSRF($csrf)) {
         $errors[] = 'Invalid security token. Please try again.';
     } else {
         $action = $_POST['form_action'] ?? '';
@@ -99,7 +99,7 @@ if (isset($_GET['edit'])) {
     $edit_member = $edit_stmt->fetch();
 }
 
-$csrf_token = generateCsrfToken();
+$csrf_token = generateCSRF();
 $page_title = 'Team Management';
 require_once 'layout-header.php';
 ?>
@@ -334,7 +334,7 @@ function toggleStatus(id, type, btn) {
     formData.append('action', 'toggle_status');
     formData.append('id', id);
     formData.append('type', type);
-    formData.append('csrf_token', '<?= generateCsrfToken() ?>');
+    formData.append('csrf_token', '<?= generateCSRF() ?>');
     fetch('ajax.php', { method: 'POST', body: formData })
         .then(r => r.json())
         .then(data => { if (data.success) location.reload(); else alert(data.message); });

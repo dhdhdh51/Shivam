@@ -13,7 +13,7 @@ $success = '';
 // ── Save settings ──
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf = $_POST['csrf_token'] ?? '';
-    if (!verifyCsrfToken($csrf)) {
+    if (!validateCSRF($csrf)) {
         $errors[] = 'Invalid security token.';
     } else {
         $tab = $_POST['active_tab'] ?? 'general';
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $settings = getAllSettings();
 $s = $settings; // shorthand
 
-$csrf_token = generateCsrfToken();
+$csrf_token = generateCSRF();
 $active_tab = $_POST['active_tab'] ?? ($_GET['tab'] ?? 'general');
 $page_title = 'Settings';
 require_once 'layout-header.php';
