@@ -12,7 +12,7 @@ header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    jsonResponse(false, 'Invalid request method.');
+    echo json_encode(['success' => false, 'message' => 'Invalid request method.']); exit;
 }
 
 $action = sanitize($_POST['action'] ?? '');
@@ -45,7 +45,7 @@ function handleLeadSubmission(): void
 {
     // CSRF
     if (!validateCSRF($_POST['csrf_token'] ?? '')) {
-        jsonResponse(false, 'Security token expired. Please refresh and try again.');
+        echo json_encode(['success' => false, 'message' => 'Security token expired. Please refresh and try again.']); exit;
     }
 
     $name       = sanitize($_POST['name'] ?? '');
@@ -57,21 +57,24 @@ function handleLeadSubmission(): void
     $source     = sanitize($_POST['source'] ?? 'website');
 
     if (empty($name) || empty($phone)) {
-        jsonResponse(false, 'Name and phone are required.');
+        echo json_encode(['success' => false, 'message' => 'Name and phone are required.']); exit;
     }
     if (!preg_match('/^[0-9+\-\s]{7,15}$/', $phone)) {
-        jsonResponse(false, 'Please enter a valid phone number.');
+        echo json_encode(['success' => false, 'message' => 'Please enter a valid phone number.']); exit;
     }
     if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        jsonResponse(false, 'Please enter a valid email address.');
+        echo json_encode(['success' => false, 'message' => 'Please enter a valid email address.']); exit;
     }
 
-    $result = submitLead($name, $phone, $email, $budget, $message, $propertyId, $source);
+    $result = submitLead([
+        'name' => $name, 'phone' => $phone, 'email' => $email, 'budget' => $budget,
+        'message' => $message, 'property_id' => $propertyId, 'source' => $source,
+    ]);
 
     if ($result['success']) {
-        jsonResponse(true, 'Thank you! Our team will contact you shortly.');
+        echo json_encode(['success' => true, 'message' => 'Thank you! Our team will contact you shortly.']); exit;
     } else {
-        jsonResponse(false, $result['message']);
+        echo json_encode(['success' => false, 'message' => $result['message']]); exit;
     }
 }
 
@@ -91,14 +94,11 @@ function handlePropertyFilter(): void
         'status'   => 'active',
     ];
 
-    $page    = max(1, (int)($_POST['page'] ?? 1));
-    $perPage = PROPERTIES_PER_PAGE;
-    $offset  = ($page - 1) * $perPage;
-
-    $result  = getProperties($filters, $perPage, $offset);
-    $total   = $result['total'];
-    $pages   = ceil($total / $perPage);
-    $props   = $result['properties'];
+    $page   = max(1, (int)($_POST['page'] ?? 1));
+    $result = getProperties($filters, $page);
+    $total = $result['total'];
+    $pages = $result['pages'];
+    $props = $result['properties'];
 
     ob_start();
     if (empty($props)) {
@@ -108,7 +108,7 @@ function handlePropertyFilter(): void
             <p>Try adjusting your filters to find your perfect property.</p>
         </div>';
     } else {
-        foreach ($props as $p) {
+        foreach ($props as $property) {
             include __DIR__ . '/includes/property-card.php';
         }
     }
@@ -137,7 +137,7 @@ function handlePropertyFilter(): void
 function handleQuickEnquiry(): void
 {
     if (!validateCSRF($_POST['csrf_token'] ?? '')) {
-        jsonResponse(false, 'Security token expired.');
+        echo json_encode(['success' => false, 'message' => 'Security token expired.']); exit;
     }
 
     $name       = sanitize($_POST['name'] ?? '');
@@ -147,15 +147,18 @@ function handleQuickEnquiry(): void
     $propertyId = (int)($_POST['property_id'] ?? 0);
 
     if (empty($name) || empty($phone)) {
-        jsonResponse(false, 'Name and phone number are required.');
+        echo json_encode(['success' => false, 'message' => 'Name and phone number are required.']); exit;
     }
 
-    $result = submitLead($name, $phone, $email, '', $message, $propertyId, 'property_page');
+    $result = submitLead([
+        'name' => $name, 'phone' => $phone, 'email' => $email,
+        'message' => $message, 'property_id' => $propertyId, 'source' => 'property_page',
+    ]);
 
     if ($result['success']) {
-        jsonResponse(true, 'Enquiry sent! We\'ll get back to you very soon.');
+        echo json_encode(['success' => true, 'message' => "Enquiry sent! We'll get back to you very soon."]); exit;
     } else {
-        jsonResponse(false, $result['message']);
+        echo json_encode(['success' => false, 'message' => $result['message']]); exit;
     }
 }
 
@@ -165,7 +168,7 @@ function handleQuickEnquiry(): void
 function handleContactMessage(): void
 {
     if (!validateCSRF($_POST['csrf_token'] ?? '')) {
-        jsonResponse(false, 'Security token expired.');
+        echo json_encode(['success' => false, 'message' => 'Security token expired.']); exit;
     }
 
     $name    = sanitize($_POST['name'] ?? '');
@@ -175,15 +178,18 @@ function handleContactMessage(): void
     $message = sanitize($_POST['message'] ?? '');
 
     if (empty($name) || empty($phone) || empty($message)) {
-        jsonResponse(false, 'Name, phone, and message are required.');
+        echo json_encode(['success' => false, 'message' => 'Name, phone, and message are required.']); exit;
     }
 
-    $result = submitLead($name, $phone, $email, '', "Subject: $subject\n\n$message", 0, 'contact_page');
+    $result = submitLead([
+        'name' => $name, 'phone' => $phone, 'email' => $email,
+        'message' => "Subject: $subject\n\n$message", 'source' => 'contact_page',
+    ]);
 
     if ($result['success']) {
-        jsonResponse(true, 'Your message has been sent! We\'ll respond within 24 hours.');
+        echo json_encode(['success' => true, 'message' => "Your message has been sent! We'll respond within 24 hours."]); exit;
     } else {
-        jsonResponse(false, $result['message']);
+        echo json_encode(['success' => false, 'message' => $result['message']]); exit;
     }
 }
 

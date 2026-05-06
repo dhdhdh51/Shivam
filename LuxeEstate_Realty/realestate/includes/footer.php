@@ -121,7 +121,13 @@ $footerAbout = getSetting('footer_about');
         
         <div class="footer-bottom">
             <p>© <?= date('Y') ?> <?= htmlspecialchars($siteName) ?>. All Rights Reserved.</p>
-            <div style="display:flex;gap:1.5rem">
+            <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap">
+                <!-- Real-time visitor counter -->
+                <div class="live-visitor-badge" id="liveVisitorBadge" title="People currently on the site">
+                    <span class="live-dot"></span>
+                    <span id="liveVisitorCount">…</span>
+                    <span class="live-label">online now</span>
+                </div>
                 <a href="<?= SITE_URL ?>/privacy.php">Privacy Policy</a>
                 <a href="<?= SITE_URL ?>/terms.php">Terms of Use</a>
                 <a href="<?= SITE_URL ?>/sitemap.xml" style="color:rgba(255,255,255,0.4)">Sitemap</a>
@@ -129,6 +135,76 @@ $footerAbout = getSetting('footer_about');
         </div>
     </div>
 </footer>
+
+<style>
+.live-visitor-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,.12); border: 1px solid rgba(201,168,76,.25);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 0.78rem; color: rgba(255,255,255,.8);
+    transition: opacity .4s;
+}
+.live-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74,222,128,.5);
+    animation: livePulse 2s infinite;
+    flex-shrink: 0;
+}
+@keyframes livePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(74,222,128,.6); }
+    70%  { box-shadow: 0 0 0 7px rgba(74,222,128,0); }
+    100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+#liveVisitorCount {
+    font-weight: 700; color: #E5C878;
+    display: inline-block;
+    transition: transform .3s, opacity .3s;
+}
+.live-label { color: rgba(255,255,255,.55); }
+</style>
+
+<script>
+(function () {
+    const badge   = document.getElementById('liveVisitorBadge');
+    const counter = document.getElementById('liveVisitorCount');
+    if (!badge || !counter) return;
+
+    function animateNumber(el, from, to) {
+        if (from === to) return;
+        const steps = 20, step = (to - from) / steps;
+        let current = from, i = 0;
+        const id = setInterval(() => {
+            i++;
+            current += step;
+            el.textContent = Math.round(current);
+            if (i >= steps) { clearInterval(id); el.textContent = to; }
+        }, 40);
+    }
+
+    function ping() {
+        fetch('<?= SITE_URL ?>/visitors.php', { method: 'GET', credentials: 'same-origin' })
+            .then(r => r.json())
+            .then(data => {
+                const prev = parseInt(counter.textContent) || 0;
+                const next = data.count || 1;
+                if (prev !== next) {
+                    counter.style.transform = 'scale(1.25)';
+                    counter.style.opacity   = '.6';
+                    setTimeout(() => {
+                        counter.style.transform = '';
+                        counter.style.opacity   = '';
+                        animateNumber(counter, prev, next);
+                    }, 150);
+                }
+            })
+            .catch(() => { counter.textContent = '—'; });
+    }
+
+    ping();
+    setInterval(ping, 30000);
+})();
+</script>
 
 <!-- STICKY BUTTONS -->
 <div class="sticky-buttons">

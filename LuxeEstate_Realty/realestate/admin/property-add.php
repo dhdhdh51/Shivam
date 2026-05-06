@@ -8,9 +8,9 @@ $db     = db();
 $errors = [];
 $prop   = [
     'title'=>'','slug'=>'','price'=>'','location'=>'','city'=>'','type'=>'Apartment',
-    'bhk'=>'','area'=>'','description'=>'','amenities'=>'[]','nearby'=>'[]',
-    'possession'=>'','rera_id'=>'','featured'=>0,'trending'=>0,'status'=>'active',
-    'meta_title'=>'','meta_desc'=>'',
+    'bhk'=>'','area_sqft'=>'','description'=>'','amenities'=>'[]','nearby'=>'[]',
+    'possession'=>'','rera_number'=>'','featured'=>0,'trending'=>0,'status'=>'active',
+    'meta_title'=>'','meta_description'=>'',
 ];
 $existingImages = [];
 
@@ -32,16 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'location'   => sanitize($_POST['location'] ?? ''),
             'city'       => sanitize($_POST['city'] ?? ''),
             'type'       => sanitize($_POST['type'] ?? 'Apartment'),
-            'bhk'        => sanitize($_POST['bhk'] ?? ''),
-            'area'       => (int)($_POST['area'] ?? 0),
-            'description'=> sanitize($_POST['description'] ?? ''),
-            'possession' => sanitize($_POST['possession'] ?? ''),
-            'rera_id'    => sanitize($_POST['rera_id'] ?? ''),
-            'featured'   => isset($_POST['featured']) ? 1 : 0,
-            'trending'   => isset($_POST['trending']) ? 1 : 0,
-            'status'     => sanitize($_POST['status'] ?? 'active'),
-            'meta_title' => sanitize($_POST['meta_title'] ?? ''),
-            'meta_desc'  => sanitize($_POST['meta_desc'] ?? ''),
+            'bhk'             => sanitize($_POST['bhk'] ?? ''),
+            'area_sqft'       => (int)($_POST['area_sqft'] ?? 0),
+            'description'     => sanitize($_POST['description'] ?? ''),
+            'possession'      => sanitize($_POST['possession'] ?? ''),
+            'rera_number'     => sanitize($_POST['rera_number'] ?? ''),
+            'featured'        => isset($_POST['featured']) ? 1 : 0,
+            'trending'        => isset($_POST['trending']) ? 1 : 0,
+            'status'          => sanitize($_POST['status'] ?? 'active'),
+            'meta_title'      => sanitize($_POST['meta_title'] ?? ''),
+            'meta_description'=> sanitize($_POST['meta_description'] ?? ''),
         ];
 
         // Parse amenities + nearby
@@ -61,17 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             if ($isEdit) {
                 $sql = "UPDATE properties SET title=:title,slug=:slug,price=:price,location=:location,city=:city,
-                    type=:type,bhk=:bhk,area=:area,description=:description,amenities=:amenities,nearby=:nearby,
-                    possession=:possession,rera_id=:rera_id,featured=:featured,trending=:trending,status=:status,
-                    meta_title=:meta_title,meta_desc=:meta_desc WHERE id=:id";
+                    type=:type,bhk=:bhk,area_sqft=:area_sqft,description=:description,amenities=:amenities,nearby=:nearby,
+                    possession=:possession,rera_number=:rera_number,featured=:featured,trending=:trending,status=:status,
+                    meta_title=:meta_title,meta_description=:meta_description WHERE id=:id";
                 $d[':id'] = $isEdit;
                 $db->prepare($sql)->execute($d);
                 $propId = $isEdit;
             } else {
-                $sql = "INSERT INTO properties (title,slug,price,location,city,type,bhk,area,description,amenities,
-                    nearby,possession,rera_id,featured,trending,status,meta_title,meta_desc,created_at)
-                    VALUES (:title,:slug,:price,:location,:city,:type,:bhk,:area,:description,:amenities,:nearby,
-                    :possession,:rera_id,:featured,:trending,:status,:meta_title,:meta_desc,NOW())";
+                $sql = "INSERT INTO properties (title,slug,price,location,city,type,bhk,area_sqft,description,amenities,
+                    nearby,possession,rera_number,featured,trending,status,meta_title,meta_description,created_at)
+                    VALUES (:title,:slug,:price,:location,:city,:type,:bhk,:area_sqft,:description,:amenities,:nearby,
+                    :possession,:rera_number,:featured,:trending,:status,:meta_title,:meta_description,NOW())";
                 $db->prepare($sql)->execute($d);
                 $propId = (int)$db->lastInsertId();
             }
@@ -187,7 +187,7 @@ $cities        = $db->query("SELECT DISTINCT city FROM properties WHERE city != 
                         </div>
                         <div class="form-group">
                             <label class="form-label">Area (sq.ft)</label>
-                            <input type="number" name="area" value="<?= htmlspecialchars($prop['area'] ?? '') ?>"
+                            <input type="number" name="area_sqft" value="<?= htmlspecialchars($prop['area_sqft'] ?? '') ?>"
                                    placeholder="1200" class="form-control" min="0">
                         </div>
                         <div class="form-group">
@@ -210,7 +210,7 @@ $cities        = $db->query("SELECT DISTINCT city FROM properties WHERE city != 
                         </div>
                         <div class="form-group">
                             <label class="form-label">RERA ID</label>
-                            <input type="text" name="rera_id" value="<?= htmlspecialchars($prop['rera_id'] ?? '') ?>"
+                            <input type="text" name="rera_number" value="<?= htmlspecialchars($prop['rera_number'] ?? '') ?>"
                                    placeholder="PRM/KA/RERA/..." class="form-control">
                         </div>
                     </div>
@@ -304,8 +304,8 @@ $cities        = $db->query("SELECT DISTINCT city FROM properties WHERE city != 
                     </div>
                     <div class="form-group">
                         <label class="form-label">Meta Description</label>
-                        <textarea name="meta_desc" rows="3" class="form-control" maxlength="160"
-                            placeholder="Brief description for search engines (max 160 chars)"><?= htmlspecialchars($prop['meta_desc'] ?? '') ?></textarea>
+                        <textarea name="meta_description" rows="3" class="form-control" maxlength="160"
+                            placeholder="Brief description for search engines (max 160 chars)"><?= htmlspecialchars($prop['meta_description'] ?? '') ?></textarea>
                     </div>
                 </div>
             </div>

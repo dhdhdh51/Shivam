@@ -1,0 +1,18 @@
+Options -Indexes
+RewriteEngine On
+RewriteBase /
+
+# ── Pretty URL rewrites ──────────────────────────────────────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^property/([a-zA-Z0-9_-]+)/?$ property.php?slug=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ blog-single.php?slug=$1 [L,QSA]
+
+# ── Block direct PHP access to config / database ─────────────
+<FilesMatch "^(config\.php|database\.php)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
