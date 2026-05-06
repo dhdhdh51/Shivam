@@ -9,6 +9,7 @@
 /* ===================== CSS VARIABLES ===================== */
 :root {
     --beige: #F5EFE6;
+    --beige-light: #FAF7F2;
     --beige-dark: #EDE3D5;
     --beige-deep: #E3D5C2;
     --maroon: #800000;
@@ -1796,3 +1797,24 @@ a.btn-white-outline:hover, button.btn-white-outline:hover { background: var(--wh
     .article-nav-next { text-align: left; }
     .blog-hero-img { height: 220px; }
 }
+
+/* ===================== ADDITIONAL MISSING CLASSES ===================== */
+
+/* About page — stat section icon */
+.stat-icon {
+    width: 56px; height: 56px; border-radius: var(--radius-md); margin: 0 auto 12px;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.25);
+    display: flex; align-items: center; justify-content: center;
+}
+.stat-icon i { font-size: 1.4rem; color: var(--gold); }
+.stats-section .stat-icon { background: rgba(201,168,76,0.12); }
+
+/* Typography — lead paragraph (used in terms/privacy) */
+.lead { font-size: 1.1rem; color: var(--text-mid); line-height: 1.85; }
+
+/* Blog section background */
+.blog-section { background: var(--beige); }
+
+/* Mobile nav link text color fix */
+.main-nav.open a { color: var(--text-dark) !important; }
+.main-nav.open a.active, .main-nav.open a:hover { color: var(--maroon) !important; background: rgba(128,0,0,0.06); }

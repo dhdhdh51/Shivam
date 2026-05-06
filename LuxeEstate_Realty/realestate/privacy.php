@@ -108,14 +108,14 @@ require_once 'includes/header.php';
                 <p>If you have any questions about this Privacy Policy or how we handle your data, please contact us:</p>
                 <div class="bg-beige p-4 rounded">
                   <p class="mb-1"><i class="fas fa-building me-2 text-maroon"></i><strong><?= htmlspecialchars($settings['site_name'] ?? SITE_NAME) ?></strong></p>
-                  <?php if (!empty($settings['address'])): ?>
-                    <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-maroon"></i><?= htmlspecialchars($settings['address']) ?></p>
+                  <?php if (!empty($settings['contact_address'])): ?>
+                    <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-maroon"></i><?= htmlspecialchars($settings['contact_address']) ?></p>
                   <?php endif; ?>
-                  <?php if (!empty($settings['email'])): ?>
-                    <p class="mb-1"><i class="fas fa-envelope me-2 text-maroon"></i><a href="mailto:<?= htmlspecialchars($settings['email']) ?>"><?= htmlspecialchars($settings['email']) ?></a></p>
+                  <?php if (!empty($settings['contact_email'])): ?>
+                    <p class="mb-1"><i class="fas fa-envelope me-2 text-maroon"></i><a href="mailto:<?= htmlspecialchars($settings['contact_email']) ?>"><?= htmlspecialchars($settings['contact_email']) ?></a></p>
                   <?php endif; ?>
-                  <?php if (!empty($settings['phone'])): ?>
-                    <p class="mb-0"><i class="fas fa-phone me-2 text-maroon"></i><a href="tel:<?= htmlspecialchars($settings['phone']) ?>"><?= htmlspecialchars($settings['phone']) ?></a></p>
+                  <?php if (!empty($settings['contact_phone'])): ?>
+                    <p class="mb-0"><i class="fas fa-phone me-2 text-maroon"></i><a href="tel:<?= htmlspecialchars($settings['contact_phone']) ?>"><?= htmlspecialchars($settings['contact_phone']) ?></a></p>
                   <?php endif; ?>
                 </div>
               </div>

@@ -99,7 +99,7 @@ include __DIR__ . '/includes/header.php';
             <?php foreach ($stats as $stat): ?>
             <div class="stat-item fade-up">
                 <div class="stat-icon"><i class="fas <?= $stat['icon'] ?>"></i></div>
-                <div class="stat-number counter" data-target="<?= preg_replace('/[^0-9]/', '', $stat['value']) ?>">
+                <div class="stat-number counter" data-target="<?= preg_replace('/[^0-9]/', '', $stat['value']) ?>" data-suffix="+">
                     <?= htmlspecialchars($stat['value']) ?>
                 </div>
                 <div class="stat-label"><?= htmlspecialchars($stat['label']) ?></div>

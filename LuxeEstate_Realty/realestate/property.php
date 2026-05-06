@@ -37,7 +37,7 @@ foreach ($images as $img) {
 if (!$primaryImage && !empty($images)) $primaryImage = $images[0]['image_path'];
 
 // Related properties
-$related = getProperties(['type' => $property['type'], 'status' => 'active'], 3, 0)['properties'];
+$related = getProperties(['type' => $property['type']], 1)['properties'];
 $related = array_filter($related, fn($p) => $p['id'] !== $property['id']);
 $related = array_slice($related, 0, 3);
 

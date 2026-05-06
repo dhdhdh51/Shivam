@@ -107,7 +107,7 @@ require_once 'includes/header.php';
                 <p>Any disputes arising from these terms or our services shall be:</p>
                 <ul>
                   <li>First attempted to be resolved through mutual discussion and negotiation</li>
-                  <li>Subject to the jurisdiction of courts in <?= isset($settings['address']) ? htmlspecialchars(explode(',', $settings['address'])[0]) : 'our registered city' ?></li>
+                  <li>Subject to the jurisdiction of courts in <?= isset($settings['contact_address']) ? htmlspecialchars(explode(',', $settings['contact_address'])[0]) : 'our registered city' ?></li>
                   <li>Governed by applicable Indian laws and regulations</li>
                 </ul>
               </div>
@@ -122,14 +122,14 @@ require_once 'includes/header.php';
                 <p>For questions regarding these Terms and Conditions, please contact us:</p>
                 <div class="bg-beige p-4 rounded">
                   <p class="mb-1"><i class="fas fa-building me-2 text-maroon"></i><strong><?= htmlspecialchars($settings['site_name'] ?? SITE_NAME) ?></strong></p>
-                  <?php if (!empty($settings['address'])): ?>
-                    <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-maroon"></i><?= htmlspecialchars($settings['address']) ?></p>
+                  <?php if (!empty($settings['contact_address'])): ?>
+                    <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-maroon"></i><?= htmlspecialchars($settings['contact_address']) ?></p>
                   <?php endif; ?>
-                  <?php if (!empty($settings['email'])): ?>
-                    <p class="mb-1"><i class="fas fa-envelope me-2 text-maroon"></i><a href="mailto:<?= htmlspecialchars($settings['email']) ?>"><?= htmlspecialchars($settings['email']) ?></a></p>
+                  <?php if (!empty($settings['contact_email'])): ?>
+                    <p class="mb-1"><i class="fas fa-envelope me-2 text-maroon"></i><a href="mailto:<?= htmlspecialchars($settings['contact_email']) ?>"><?= htmlspecialchars($settings['contact_email']) ?></a></p>
                   <?php endif; ?>
-                  <?php if (!empty($settings['phone'])): ?>
-                    <p class="mb-0"><i class="fas fa-phone me-2 text-maroon"></i><a href="tel:<?= htmlspecialchars($settings['phone']) ?>"><?= htmlspecialchars($settings['phone']) ?></a></p>
+                  <?php if (!empty($settings['contact_phone'])): ?>
+                    <p class="mb-0"><i class="fas fa-phone me-2 text-maroon"></i><a href="tel:<?= htmlspecialchars($settings['contact_phone']) ?>"><?= htmlspecialchars($settings['contact_phone']) ?></a></p>
                   <?php endif; ?>
                 </div>
               </div>
